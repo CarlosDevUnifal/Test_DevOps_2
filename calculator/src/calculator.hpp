@@ -1,25 +1,25 @@
-#ifndef UNITTEST
+#ifndef CALCULATOR_HPP
+#define CALCULATOR_HPP
 
-#include <iostream>
+template <typename T>
+class Calculator {
+ public:
+  Calculator(T a, T b) : a_(a), b_(b) {}
 
-#include "calculator.hpp"
+  T add() const { return a_ + b_; }
+  T subtract() const { return a_ - b_; }
+  T multiply() const { return a_ * b_; }
 
-int main() {
-  double number1 = 0.0;
-  double number2 = 0.0;
+  T divide() const {
+    if (b_ == 0) {
+      return static_cast<T>(0);  // não lança exceção
+    }
+    return a_ / b_;
+  }
 
-  std::cout << "Hello Calculator" << std::endl;
-  std::cout << "Enter Number 1: ";
-  std::cin >> number1;
-  std::cout << "Enter Number 2: ";
-  std::cin >> number2;
-
-  Calculator<double> c(number1, number2);
-
-  std::cout << "Result -> " << number1 << " / " << number2 << " = "
-            << c.divide() << std::endl;
-
-  return 0;
-}
+ private:
+  T a_;
+  T b_;
+};
 
 #endif
