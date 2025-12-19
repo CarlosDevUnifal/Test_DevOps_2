@@ -1,23 +1,25 @@
-template <typename T>
-class Calculator {
- private:
-  T number1;
-  T number2;
+#ifndef UNITTEST
 
- public:
-  Calculator(T n1, T n2) : number1(n1), number2(n2) {}
+#include <iostream>
 
-  inline T add() { return number1 + number2; }
+#include "calculator.hpp"
 
-  inline T subtract() { return number1 - number2; }
+int main() {
+  double number1 = 0.0;
+  double number2 = 0.0;
 
-  inline T multiply() { return number1 * number2; }
+  std::cout << "Hello Calculator" << std::endl;
+  std::cout << "Enter Number 1: ";
+  std::cin >> number1;
+  std::cout << "Enter Number 2: ";
+  std::cin >> number2;
 
-  inline T divide() {
-    // Evita divisão por zero (0/0 ou x/0)
-    if (number2 == static_cast<T>(0)) {
-      return static_cast<T>(0);
-    }
-    return number1 / number2;
-  }
-};
+  Calculator<double> c(number1, number2);
+
+  std::cout << "Result -> " << number1 << " / " << number2 << " = "
+            << c.divide() << std::endl;
+
+  return 0;
+}
+
+#endif
