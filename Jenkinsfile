@@ -68,6 +68,11 @@ pipeline {
             steps {
                 ws("workspace/${env.JOB_NAME}/build") {
                     dir(env.PROJECT_DIR) {
+                        sh '''
+                        echo "Artefatos gerados:"
+                        ls -la bin || true
+                        ls -la tests/bin || true
+                        '''
                         archiveArtifacts artifacts: 'bin/calculator, tests/bin/unittest', fingerprint: true
                     }
                 }
