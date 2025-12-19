@@ -68,7 +68,7 @@ pipeline {
             steps {
                 ws("workspace/${env.JOB_NAME}/build") {
                     dir(env.PROJECT_DIR) {
-                        archiveArtifacts artifacts: 'bin/calculator', fingerprint: true
+                        archiveArtifacts artifacts: 'bin/calculator, tests/bin/unittest', fingerprint: true
                     }
                 }
             }
