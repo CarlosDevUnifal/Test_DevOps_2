@@ -286,7 +286,7 @@ Swap:          2.0Gi       594Mi       1.4Gi  # Sistema estável com swap
 
 ```bash
 git config --global user.name "Carlos Henrique Arantes"
-git config --global user.email "seu-email@email.com"
+git config --global user.email "carlos.arantes@sou.unifal-mg.edu.br"
 ```
 
 ---
