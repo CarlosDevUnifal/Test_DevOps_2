@@ -21,6 +21,9 @@ pipeline {
 
         stage('Code Quality (matrix agents)') {
             matrix {
+                options {
+                    parallelsAlwaysFailFast()
+                }
                 axes {
                     axis {
                         name 'NODE'
@@ -73,6 +76,13 @@ pipeline {
     post {
         success { echo '✅ Pipeline executado com sucesso!' }
         failure { echo '❌ Pipeline falhou! Verifique os logs.' }
-        always { echo "Build #${BUILD_NUMBER} finalizado"; cleanWs() }
+        always {
+            echo "Build #${BUILD_NUMBER} finalizado"
+            script {
+                node('cpp') {
+                    cleanWs()
+                }
+            }
+        }
     }
 }
