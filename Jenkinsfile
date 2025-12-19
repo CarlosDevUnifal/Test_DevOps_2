@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'cpp' }
+    agent none
     options { buildDiscarder(logRotator(numToKeepStr: '10')); timestamps(); timeout(time: 30, unit: 'MINUTES') }
     triggers { cron('0 8 * * *') }
 
@@ -9,44 +9,62 @@ pipeline {
 
     stages {
         stage('Checkout') {
+            agent { label 'cpp' }
             steps {
                 echo '=== Obtendo código fonte ==='
                 checkout scm
                 sh 'ls -la'
-                sh 'ls -la calculator'
+                sh "ls -la ${env.PROJECT_DIR}"
+                stash name: 'source', includes: '**'
             }
         }
 
-        stage('Code Quality') {
-            steps {
-                dir(env.PROJECT_DIR) {
-                    sh 'make check'
+        stage('Code Quality (matrix agents)') {
+            matrix {
+                axes {
+                    axis {
+                        name 'NODE'
+                        values 'cpp-agent-1', 'cpp-agent-2'
+                    }
+                }
+                agent { label "${NODE}" }
+                stages {
+                    stage('Lint & Format') {
+                        steps {
+                            ws("workspace/${env.JOB_NAME}/${NODE}") {
+                                unstash 'source'
+                                dir(env.PROJECT_DIR) {
+                                    sh 'make check'
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        stage('Build') {
+        stage('Build & Test (single artifact)') {
+            agent { label 'cpp' }
             steps {
-                dir(env.PROJECT_DIR) {
-                    sh 'make clean || true'
-                    sh 'make'
-                    sh 'ls -la bin/'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                dir(env.PROJECT_DIR) {
-                    sh 'make unittest'
+                ws("workspace/${env.JOB_NAME}/build") {
+                    unstash 'source'
+                    dir(env.PROJECT_DIR) {
+                        sh 'make clean || true'
+                        sh 'make'
+                        sh 'make unittest'
+                        sh 'ls -la bin/'
+                    }
                 }
             }
         }
 
         stage('Archive Artifacts') {
+            agent { label 'cpp' }
             steps {
-                dir(env.PROJECT_DIR) {
-                    archiveArtifacts artifacts: 'bin/calculator', fingerprint: true
+                ws("workspace/${env.JOB_NAME}/build") {
+                    dir(env.PROJECT_DIR) {
+                        archiveArtifacts artifacts: 'bin/calculator', fingerprint: true
+                    }
                 }
             }
         }
