@@ -1,6 +1,11 @@
 pipeline {
     agent none
-    options { buildDiscarder(logRotator(numToKeepStr: '10')); timestamps(); timeout(time: 30, unit: 'MINUTES') }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+        skipDefaultCheckout(true)
+    }
     triggers { cron('0 8 * * *') }
 
     environment {
