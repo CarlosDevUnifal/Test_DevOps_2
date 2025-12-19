@@ -49,7 +49,7 @@ clean:
 # Linter target using clang-tidy
 lint:
 	@echo "Running C++ linter (clang-tidy)..."
-	clang-tidy $(SRCS) -checks="cppcoreguidelines*" -warnings-as-errors='*' -header-filter="$(SRC_DIR)/.*" -quiet -- -std=c++17 -Wno-everything
+	clang-tidy $(SRCS) -quiet -checks="cppcoreguidelines*" -warnings-as-errors='*' -header-filter="$(SRC_DIR)/.*" -- -std=c++17 -w -Wno-everything
 
 # Formatter check target using clang-format
 format-check:
