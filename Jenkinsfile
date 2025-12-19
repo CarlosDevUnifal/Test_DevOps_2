@@ -21,9 +21,6 @@ pipeline {
 
         stage('Code Quality (matrix agents)') {
             matrix {
-                options {
-                    parallelsAlwaysFailFast()
-                }
                 axes {
                     axis {
                         name 'NODE'
