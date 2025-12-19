@@ -13,5 +13,11 @@ class Calculator {
 
   inline T multiply() { return number1 * number2; }
 
-  inline T divide() { return number1 / number2; }
+  inline T divide() {
+    // Evita divisão por zero (0/0 ou x/0)
+    if (number2 == static_cast<T>(0)) {
+      return static_cast<T>(0);
+    }
+    return number1 / number2;
+  }
 };
