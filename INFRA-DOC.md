@@ -10,7 +10,7 @@ Implementação de pipeline de integração e entrega contínua para projeto C++
 
 ### 1.1 Servidor Host
 | Item | Especificação |
-|------|---------------| 
+|------|---------------|  
 | Sistema Operacional | Ubuntu 24.04 LTS |
 | Docker Engine | Instalado via repositório oficial |
 | Swap | 2 GB (para evitar OOM em máquinas com RAM limitada) |
